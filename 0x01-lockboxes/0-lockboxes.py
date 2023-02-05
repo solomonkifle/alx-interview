@@ -1,17 +1,23 @@
 #!/usr/bin/python3
-"""Script will unlock list of lists"""
+""" oppening boxes"""
+
+def getKeys(boxes):
+    """get all keys"""
+    checked = []
+    size = len(boxes)
+    for row in range(size):
+        for col in range(len(boxes[row])):
+            k = boxes[row][col]
+            if (k < size and k != row):
+                if k not in checked:
+                    checked.append(k)
+    checked.sort()
+    return checked
 
 
 def canUnlockAll(boxes):
-    """This function will take a list of lists and the content
-       of a list will unlock other lists
-    """
-
-    keys = [0]
-    for key in keys:
-        for boxKey in boxes[key]:
-            if boxKey not in keys and boxKey < len(boxes):
-                keys.append(boxKey)
-    if len(keys) == len(boxes):
-        return True
-    return False
+    """determines if all the boxes can be opened"""
+    opened = getKeys(boxes)
+    if 0 in opened:
+        opened.remove(0)
+    return len(opened) == len(boxes) - 1
