@@ -1,23 +1,21 @@
 #!/usr/bin/python3
-""" oppening boxes"""
-
-def getKeys(boxes):
-    """get all keys"""
-    checked = []
-    size = len(boxes)
-    for row in range(size):
-        for col in range(len(boxes[row])):
-            k = boxes[row][col]
-            if (k < size and k != row):
-                if k not in checked:
-                    checked.append(k)
-    checked.sort()
-    return checked
+'''A module for working with lockboxes.
+'''
 
 
 def canUnlockAll(boxes):
-    """determines if all the boxes can be opened"""
-    opened = getKeys(boxes)
-    if 0 in opened:
-        opened.remove(0)
-    return len(opened) == len(boxes) - 1
+    '''Checks if all the boxes in a list of boxes containing the keys
+    (indices) to other boxes can be unlocked given that the first
+    box is unlocked.
+    '''
+    n = len(boxes)
+    seen_boxes = set([0])
+    unseen_boxes = set(boxes[0]).difference(set([0]))
+    while len(unseen_boxes) > 0:
+        boxIdx = unseen_boxes.pop()
+        if not boxIdx or boxIdx >= n or boxIdx < 0:
+            continue
+        if boxIdx not in seen_boxes:
+            unseen_boxes = unseen_boxes.union(boxes[boxIdx])
+            seen_boxes.add(boxIdx)
+    return n == len(seen_boxes)
